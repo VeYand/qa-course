@@ -1,6 +1,0 @@
-services:
-  lab8:
-    container_name: lab8
-    build:
-      context: ./lab8
-      dockerfile: Dockerfile

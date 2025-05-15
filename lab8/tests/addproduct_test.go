@@ -18,6 +18,30 @@ func TestValidAddProduct(t *testing.T) {
 	}
 }
 
+func TestAddProductDuplicateTitle(t *testing.T) {
+	client := api.NewShopApi(baseUrl)
+
+	t.Run("duplicate-api", func(t *testing.T) {
+		t.Parallel()
+
+		product := validProductMinCategoryId
+
+		firstID, err := client.AddProduct(product)
+		assert.NoError(t, err, "Ошибка при добавлении продукта")
+
+		firstCreatedProduct, err := client.GetByID(firstID)
+		assert.NoError(t, err, "Не получилось извлечь продукт после добавления")
+
+		secondID, err := client.AddProduct(product)
+		assert.NoError(t, err, "Ошибка при добавлении продукта")
+
+		secondCreatedProduct, err := client.GetByID(secondID)
+		assert.NoError(t, err, "Не получилось извлечь продукт после добавления")
+
+		assert.Equal(t, firstCreatedProduct.Alias+"-0", secondCreatedProduct.Alias)
+	})
+}
+
 func TestInvalidAddProduct(t *testing.T) {
 	client := api.NewShopApi(baseUrl)
 
